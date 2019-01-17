@@ -14,7 +14,7 @@ RUN apt-get install wget
 
 RUN wget https://archive.apache.org/dist/spark/spark-2.1.0/spark-2.1.0-bin-hadoop2.7.tgz
 
-RUN mv /spark-2.1.0-bin-hadoop2.7.tgz /home && RUN tar -zxvf /home/spark-2.1.0-bin-hadoop2.7.tgz -C /home && rm -f /home/spark-2.1.0-bin-hadoop2.7.tgz
+RUN mv /spark-2.1.0-bin-hadoop2.7.tgz /home && tar -zxvf /home/spark-2.1.0-bin-hadoop2.7.tgz -C /home && rm -f /home/spark-2.1.0-bin-hadoop2.7.tgz
 
 RUN chmod 777 /home/spark-2.1.0-bin-hadoop2.7
 
