@@ -14,4 +14,4 @@ jobs:
       working-directory: ./remote_dev/cpp
       run: docker build . --file Dockerfile.RemoteDev --tag blgnksy/remote_dev_cpp:1.0
     - name: Docker Push
-      run: docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/spark
+      run: docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/remote_dev_cpp:1.0
