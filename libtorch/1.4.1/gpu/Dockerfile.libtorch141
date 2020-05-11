@@ -1,15 +1,17 @@
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
 
+
 LABEL maintainer="bilginaksoy2003@yahoo.com"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y wget vim unzip zip curl cmake gdb gdbserver tzdata && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y wget vim unzip zip curl cmake git apt-utils build-essential clang  gdb gdbserver openssh-server rsync && rm -rf /var/lib/apt/lists/*
 
 RUN cd /opt &&  \
-    wget -q -O libtorch_1.4.0 https://download.pytorch.org/libtorch/cu101/libtorch-cxx11-abi-shared-with-deps-1.4.0.zip && \
-    unzip -q libtorch_1.4.0 && \
-    rm libtorch_1.4.0
+    wget -O libtorch_1.4.0.zip https://download.pytorch.org/libtorch/cu101/libtorch-cxx11-abi-shared-with-deps-1.4.0.zip && \
+    unzip libtorch_1.4.0.zip && \
+    rm libtorch_1.4.0.zip
+
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
@@ -17,4 +19,45 @@ ENV LANG=C.UTF-8
 # change timezone
 RUN ln -sf /usr/share/zoneinfo/Turkey /etc/localtime
 
+
+RUN apt-get install -y libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+
+
+RUN cd /home && git clone https://github.com/opencv/opencv.git && git clone https://github.com/opencv/opencv_contrib.git
+RUN mkdir /home/opencv/build
+RUN ls /home
+RUN cd /home/opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+                                       -D CMAKE_INSTALL_PREFIX=/usr/local \
+                                       -D WITH_CUDA=ON \
+                                       -D ENABLE_FAST_MATH=1 \
+                                       -D CUDA_FAST_MATH=1 \
+                                       -D WITH_CUBLAS=1 \
+                                       -D CUDA_ARCH_BIN=7.5 \
+                                       -D CUDA_ARCH_PTX="" \
+                                       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+                                       -DBUILD_opencv_world=OFF  .. && make -j7  && make install
+
 WORKDIR /opt/libtorch
+
+# Create dev user with password 'dev'
+RUN useradd -ms /bin/bash dev
+RUN echo 'dev:dev' | chpasswd
+
+
+# Taken from - https://docs.docker.com/engine/examples/running_ssh_service/#environment-variables
+RUN mkdir /var/run/sshd
+RUN echo 'root:root' | chpasswd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+# 22 for ssh server. 7777 for gdb server.
+EXPOSE 22 7777
+
+
+# Upon start, run ssh daemon
+CMD ["/usr/sbin/sshd", "-D"]
