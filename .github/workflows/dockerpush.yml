@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Build the Docker image
-      working-directory: ./remote_dev/cpp/gpu/Dockerfile.RemoteDev 
-      run: docker build . --file Dockerfile.RemoteDev --tag blgnksy/remote_dev_cpp_gpu:1.0
+      working-directory: ./libtorch/1.4.1/gpu/Dockerfile.libtorch141
+      run: docker build . --file Dockerfile.RemoteDev --tag blgnksy/remote_dev_libtorch_gpu:0.1
     - name: Docker Push
-      run: docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/remote_dev_cpp_gpu:1.0
+      run: docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/remote_dev_libtorch_gpu:0.1
