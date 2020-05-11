@@ -5,7 +5,7 @@ LABEL maintainer="bilginaksoy2003@yahoo.com"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y wget vim unzip zip curl cmake git apt-utils build-essential clang  gdb gdbserver openssh-server rsync && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y wget vim unzip zip curl cmake git apt-utils build-essential clang  gdb gdbserver openssh-server rsync libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev && rm -rf /var/lib/apt/lists/*
 
 RUN cd /opt &&  \
     wget -O libtorch_1.4.0.zip https://download.pytorch.org/libtorch/cu101/libtorch-cxx11-abi-shared-with-deps-1.4.0.zip && \
@@ -19,8 +19,6 @@ ENV LANG=C.UTF-8
 # change timezone
 RUN ln -sf /usr/share/zoneinfo/Turkey /etc/localtime
 
-
-RUN apt-get install -y libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 
 
 RUN cd /home && git clone https://github.com/opencv/opencv.git && git clone https://github.com/opencv/opencv_contrib.git
