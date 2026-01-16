@@ -1,0 +1,20 @@
+FROM ubuntu:24.04
+
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libncurses-dev \
+    gawk \
+    flex \
+    bison \
+    openssl \
+    libssl-dev \
+    dkms \
+    libelf-dev \
+    libudev-dev \
+    libpci-dev \
+    libiberty-dev \
+    autoconf \
+    llvm
+
