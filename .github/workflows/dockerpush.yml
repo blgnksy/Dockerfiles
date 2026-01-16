@@ -10,8 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Build the Docker image
+    - name: Build the Docker image for libtorch GPU 14.1
       working-directory: ./libtorch/1.4.1/gpu
-      run: docker build . --file Dockerfile.libtorch141 --tag blgnksy/remote_dev_libtorch_gpu:0.1
-    - name: Docker Push
-      run: docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/remote_dev_libtorch_gpu:0.1
+      run: | 
+      docker build . --file Dockerfile.libtorch141 --tag blgnksy/remote_dev_libtorch_gpu:0.1
+      docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/remote_dev_libtorch_gpu:0.1
+
+    - name: Build the Docker image for Devcontainer kernel x86-64
+      working-directory: ./remote_dev/cpp/DevContainers
+      run: | 
+      docker build . --file Dockerfile.Ubuntu24.04.x86_64.Kernel --tag blgnksy/Dockerfile.Ubuntu24.04.x86_64.Kernel:0.1
+      docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/Dockerfile.Ubuntu24.04.x86_64.Kernel:0.1
