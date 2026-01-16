@@ -13,5 +13,5 @@ jobs:
     - name: Build the Docker image for Devcontainer kernel x86-64
       working-directory: ./remote_dev/cpp/DevContainers
       run: | 
-        docker build --file Dockerfile.Ubuntu24.04.x86_64.Kernel --tag blgnksy/kernel:ubuntu24.04-x86_64
+        docker build --file Dockerfile.Ubuntu24.04.x86_64.Kernel --tag blgnksy/kernel:ubuntu24.04-x86_64 .
         docker login docker.io --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} && docker push blgnksy/kernel:ubuntu24.04-x86_64
