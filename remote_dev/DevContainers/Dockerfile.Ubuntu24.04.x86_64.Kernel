@@ -16,5 +16,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     libpci-dev \
     libiberty-dev \
     autoconf \
-    llvm
+    llvm \
+    bc
 
